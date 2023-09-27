@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    spec.ingressClassName: nginx # tells ingress that it has routing rules
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: ticketing-api.com
+      http:
+        paths:
+        - path: /api/v1/users/?(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: ticketing-auth-clusterip-service
+              port:
+                number: 4000
